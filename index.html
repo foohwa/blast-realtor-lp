@@ -1,0 +1,984 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>BLAST — The end of the WhatsApp scroll, for Malaysian realtors</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #F7F6F2;
+    --surface: #FFFFFF;
+    --surface2: #FBFAF6;
+    --ink: #16161A;
+    --ink-2: #2C2C30;
+    --muted: #6B6B70;
+    --faint: #A3A3A8;
+    --line: #E8E6DF;
+    --line-soft: #EFEDE6;
+    --chip: #F1EFE8;
+    --accent: #FF5B14;
+    --accent-deep: #D63F00;
+    --accent-soft: #FFE9DC;
+    --warn: #9E5500;
+    --warn-soft: #FBEDD8;
+    --info: #0047B3;
+    --info-soft: #E0EAFB;
+    --success: #005A3C;
+    --success-soft: #DDEFE5;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: "Geist", system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  .mono { font-family: "JetBrains Mono", monospace; }
+  a { color: inherit; text-decoration: none; }
+  h1, h2, h3, h4 { margin: 0; font-weight: 700; letter-spacing: -0.025em; }
+  p { margin: 0; line-height: 1.55; color: var(--ink-2); }
+  button { font-family: inherit; cursor: pointer; }
+
+  .container { max-width: 1280px; margin: 0 auto; padding: 0 32px; }
+  .eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px; font-weight: 600;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--accent);
+  }
+  .eyebrow.muted { color: var(--muted); }
+
+  /* ===== NAV ===== */
+  nav.top {
+    position: sticky; top: 0; z-index: 50;
+    backdrop-filter: blur(14px);
+    background: rgba(247, 246, 242, 0.82);
+    border-bottom: 1px solid var(--line);
+  }
+  nav.top .row {
+    display: flex; align-items: center; justify-content: space-between;
+    height: 68px;
+  }
+  .logo {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-weight: 800; letter-spacing: -0.02em;
+    font-size: 18px;
+  }
+  .logo-mark {
+    width: 30px; height: 30px;
+    background: var(--accent); color: white;
+    display: inline-flex; align-items: center; justify-content: center;
+    border-radius: 7px; font-size: 18px; font-weight: 800;
+  }
+  nav .links {
+    display: flex; gap: 32px; align-items: center;
+    font-size: 14px; color: var(--ink-2);
+  }
+  nav .links a:hover { color: var(--accent); }
+  nav .cta-row { display: flex; gap: 12px; align-items: center; }
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 11px 18px; border-radius: 10px;
+    font-weight: 600; font-size: 14px;
+    border: 1px solid transparent;
+    transition: transform .12s ease, background .15s ease, border-color .15s ease;
+    white-space: nowrap;
+  }
+  .btn:hover { transform: translateY(-1px); }
+  .btn-primary { background: var(--ink); color: var(--bg); }
+  .btn-primary:hover { background: var(--accent); }
+  .btn-accent { background: var(--accent); color: white; }
+  .btn-accent:hover { background: var(--accent-deep); }
+  .btn-ghost { background: transparent; color: var(--ink); border-color: var(--line); }
+  .btn-ghost:hover { background: var(--chip); }
+  .btn-lg { padding: 14px 22px; font-size: 15px; border-radius: 12px; }
+
+  /* ===== HERO ===== */
+  .hero { padding: 96px 0 80px; position: relative; overflow: hidden; }
+  .hero::before {
+    content: "";
+    position: absolute; inset: -10% -10% auto auto;
+    width: 720px; height: 720px;
+    background: radial-gradient(circle, var(--accent-soft) 0%, transparent 65%);
+    z-index: 0; pointer-events: none;
+  }
+  .hero .container { position: relative; z-index: 1; }
+  .hero-pill {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 8px 14px; border-radius: 999px;
+    background: var(--surface); border: 1px solid var(--line);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px; color: var(--ink-2); font-weight: 500;
+    letter-spacing: 0.04em;
+  }
+  .hero-pill .dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--accent); box-shadow: 0 0 0 4px var(--accent-soft);
+  }
+  h1.hero-title {
+    font-size: clamp(56px, 7.4vw, 104px);
+    line-height: 0.94; font-weight: 800; letter-spacing: -0.04em;
+    margin-top: 28px; max-width: 1100px;
+  }
+  h1.hero-title .accent { color: var(--accent); }
+  .hero-lede {
+    font-size: 22px; line-height: 1.5; color: var(--ink-2);
+    max-width: 680px; margin-top: 28px; font-weight: 400;
+  }
+  .hero-cta-row { margin-top: 36px; display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+  .hero-meta {
+    display: flex; gap: 24px; align-items: center; flex-wrap: wrap;
+    margin-top: 36px; padding-top: 28px;
+    border-top: 1px solid var(--line);
+    font-family: "JetBrains Mono", monospace; font-size: 12px;
+    color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase;
+  }
+  .hero-meta span { display: inline-flex; align-items: center; gap: 8px; }
+  .hero-meta .check { color: var(--success); font-size: 14px; }
+
+  /* Hero visual: split scroll vs grid */
+  .hero-visual {
+    margin-top: 72px;
+    display: grid; grid-template-columns: 1fr 60px 1fr; gap: 24px;
+    align-items: stretch;
+  }
+  .hv-col {
+    border-radius: 18px; overflow: hidden;
+    height: 460px; position: relative;
+  }
+  .hv-label {
+    position: absolute; top: 16px; left: 16px; z-index: 5;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px; font-weight: 600; letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 6px 10px; border-radius: 6px;
+  }
+  .hv-label.before { background: rgba(255,255,255,0.92); color: var(--muted); }
+  .hv-label.after  { background: var(--ink); color: var(--bg); }
+
+  .hv-before {
+    background: #075E54; padding: 60px 18px 0; display: flex; flex-direction: column;
+  }
+  .wa-mock { background: #ECE5DC; flex: 1; border-radius: 14px 14px 0 0; padding: 14px; overflow: hidden; position: relative; }
+  .wa-msg {
+    background: white; border-radius: 10px; padding: 10px 12px;
+    margin-bottom: 8px; font-size: 12px; color: #2C2C30;
+    line-height: 1.4; max-width: 92%;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  }
+  .wa-msg .name { font-size: 10px; color: var(--accent-deep); font-weight: 600; margin-bottom: 2px; }
+  .wa-msg .time { font-size: 9px; color: var(--faint); margin-top: 3px; text-align: right; }
+  .wa-fade { position: absolute; bottom: 0; left: 0; right: 0; height: 80px; background: linear-gradient(to top, #ECE5DC, transparent); pointer-events: none; }
+
+  .hv-divider {
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;
+    color: var(--muted);
+  }
+  .hv-divider .line { width: 1px; flex: 1; background: var(--line); }
+  .hv-divider .word { font-family: "JetBrains Mono", monospace; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; }
+
+  .hv-after {
+    background: var(--surface); border: 1px solid var(--line);
+    padding: 56px 24px 24px; display: flex; flex-direction: column;
+  }
+  .hv-search {
+    display: flex; align-items: center; gap: 8px;
+    padding: 10px 14px; border: 1px solid var(--line); border-radius: 10px;
+    background: var(--surface2); color: var(--muted); font-size: 13px;
+  }
+  .hv-chips { display: flex; gap: 6px; margin-top: 12px; }
+  .hv-chip { padding: 5px 10px; border-radius: 999px; font-size: 11px; font-family: "JetBrains Mono", monospace; background: var(--chip); color: var(--ink-2); }
+  .hv-chip.on { background: var(--ink); color: var(--bg); }
+  .hv-list { margin-top: 14px; display: flex; flex-direction: column; gap: 10px; flex: 1; overflow: hidden; }
+
+  .lst {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: 12px; padding: 12px 14px;
+  }
+  .lst .badge {
+    display: inline-block; padding: 3px 8px; border-radius: 5px;
+    font-size: 10px; font-weight: 600;
+    font-family: "JetBrains Mono", monospace; letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .badge-sell { background: var(--ink); color: var(--bg); }
+  .badge-buy  { background: var(--info-soft); color: var(--info); }
+  .badge-let  { background: var(--warn-soft); color: var(--warn); }
+  .badge-done { background: var(--success-soft); color: var(--success); }
+
+  /* ===== STAT STRIP ===== */
+  .stat-strip {
+    border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+    padding: 36px 0;
+    background: var(--surface2);
+  }
+  .stat-strip .grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px;
+  }
+  .stat-cell { padding: 0 24px; border-left: 1px solid var(--line); }
+  .stat-cell:first-child { border-left: none; padding-left: 0; }
+  .stat-num { font-size: 56px; font-weight: 800; letter-spacing: -0.035em; line-height: 1; color: var(--ink); font-feature-settings: "tnum"; }
+  .stat-num.accent { color: var(--accent); }
+  .stat-label { margin-top: 10px; font-size: 14px; color: var(--muted); line-height: 1.45; }
+
+  /* ===== SECTION ===== */
+  section.block { padding: 120px 0; }
+  section.block.compact { padding: 80px 0; }
+  .block-head { max-width: 820px; margin-bottom: 56px; }
+  .block-head h2 {
+    font-size: clamp(40px, 5.4vw, 64px); line-height: 1.02;
+    margin-top: 18px; letter-spacing: -0.035em;
+  }
+  .block-head h2 .accent { color: var(--accent); }
+  .block-head .lede { margin-top: 20px; font-size: 20px; color: var(--ink-2); max-width: 680px; }
+
+  /* ===== PROBLEM ===== */
+  .problem-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 0;
+    border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+  }
+  .problem-cell {
+    padding: 40px 36px; border-right: 1px solid var(--line);
+  }
+  .problem-cell:last-child { border-right: none; }
+  .problem-cell .num {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 13px; color: var(--accent); letter-spacing: 0.12em; font-weight: 600;
+  }
+  .problem-cell h3 {
+    font-size: 28px; margin-top: 20px; line-height: 1.15;
+  }
+  .problem-cell p { margin-top: 14px; font-size: 16px; color: var(--muted); }
+
+  /* ===== HOW IT WORKS ===== */
+  .how-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+  }
+  .how-card {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: 18px; padding: 32px;
+    display: flex; flex-direction: column;
+  }
+  .how-card .step {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-family: "JetBrains Mono", monospace; font-size: 12px;
+    color: var(--accent); font-weight: 600; letter-spacing: 0.12em;
+  }
+  .how-card .step .ring {
+    width: 24px; height: 24px; border-radius: 50%;
+    border: 1.5px solid var(--accent);
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 11px;
+  }
+  .how-card h3 { font-size: 26px; margin-top: 18px; line-height: 1.15; }
+  .how-card p { margin-top: 12px; font-size: 16px; color: var(--muted); flex: 1; }
+  .how-card .visual {
+    margin-top: 22px; height: 140px; border-radius: 12px;
+    background: var(--surface2); border: 1px solid var(--line-soft);
+    padding: 14px; overflow: hidden; display: flex; flex-direction: column; gap: 6px;
+  }
+  .how-card .vchip { font-family: "JetBrains Mono", monospace; font-size: 11px; color: var(--muted); }
+
+  /* ===== PRODUCT (phone + features) ===== */
+  .product {
+    display: grid; grid-template-columns: 360px 1fr; gap: 80px;
+    align-items: center;
+  }
+  .phone {
+    width: 320px; height: 660px;
+    background: #0B0B0D; border-radius: 38px; padding: 8px;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.18), 0 0 0 1px rgba(0,0,0,0.04);
+    margin: 0 auto;
+  }
+  .phone-screen {
+    width: 100%; height: 100%; background: var(--bg);
+    border-radius: 32px; overflow: hidden;
+    display: flex; flex-direction: column;
+  }
+  .phone-head {
+    padding: 16px 18px 12px;
+    border-bottom: 1px solid var(--line);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .phone-search {
+    margin: 12px 16px 0;
+    padding: 10px 14px; background: var(--surface2);
+    border: 1px solid var(--line); border-radius: 10px;
+    color: var(--faint); font-size: 13px;
+    display: flex; gap: 8px;
+  }
+  .phone-tabs { padding: 12px 16px; display: flex; gap: 6px; overflow: hidden; border-bottom: 1px solid var(--line); }
+  .phone-list { padding: 12px 14px; display: flex; flex-direction: column; gap: 10px; overflow: hidden; }
+
+  .feat-list { display: flex; flex-direction: column; gap: 6px; }
+  .feat-item {
+    padding: 24px 0; border-top: 1px solid var(--line);
+    display: grid; grid-template-columns: 56px 1fr; gap: 24px; align-items: start;
+  }
+  .feat-item:last-child { border-bottom: 1px solid var(--line); }
+  .feat-item .ico {
+    width: 44px; height: 44px; border-radius: 10px;
+    background: var(--accent-soft); color: var(--accent-deep);
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 22px;
+  }
+  .feat-item h4 { font-size: 22px; line-height: 1.2; }
+  .feat-item p { margin-top: 8px; font-size: 16px; color: var(--muted); }
+
+  /* ===== HANDOFF ===== */
+  .handoff {
+    background: var(--ink); color: #F2F1ED; border-radius: 24px;
+    padding: 64px;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center;
+  }
+  .handoff h2 { color: #F2F1ED; font-size: clamp(36px, 4.6vw, 52px); line-height: 1.05; }
+  .handoff p { color: rgba(242,241,237,0.7); margin-top: 20px; font-size: 18px; line-height: 1.55; }
+  .handoff .keys {
+    margin-top: 32px; display: flex; gap: 12px; flex-wrap: wrap;
+  }
+  .handoff .key {
+    padding: 8px 14px; border-radius: 999px;
+    background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12);
+    font-family: "JetBrains Mono", monospace; font-size: 12px;
+    color: rgba(242,241,237,0.85); letter-spacing: 0.04em;
+  }
+  .handoff-card {
+    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px; padding: 28px;
+  }
+  .handoff-card .row1 { display: flex; justify-content: space-between; align-items: center; }
+  .handoff-card h3 { color: #F2F1ED; font-size: 24px; margin-top: 14px; }
+  .handoff-card .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 20px; }
+  .handoff-card .lbl { font-family: "JetBrains Mono", monospace; font-size: 10px; color: rgba(255,255,255,0.45); letter-spacing: 0.1em; }
+  .handoff-card .val { font-size: 17px; font-weight: 600; margin-top: 4px; color: #F2F1ED; }
+  .handoff-card button {
+    width: 100%; margin-top: 22px;
+    padding: 14px; background: #25D366; color: white;
+    border: none; border-radius: 12px; font-weight: 700;
+    font-size: 15px; display: flex; align-items: center; justify-content: center; gap: 10px;
+  }
+
+  /* ===== CREDIT LOOP ===== */
+  .loop-wrap {
+    display: grid; grid-template-columns: 1.1fr 1fr; gap: 56px; align-items: center;
+  }
+  .loop-card {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: 18px; padding: 40px;
+  }
+  .loop-row { display: flex; gap: 20px; align-items: center; }
+  .loop-pill {
+    width: 64px; height: 64px; border-radius: 16px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; font-weight: 800;
+    flex-shrink: 0;
+  }
+  .lp-1 { background: var(--ink); color: var(--bg); }
+  .lp-2 { background: var(--accent-soft); color: var(--accent-deep); }
+  .lp-3 { background: var(--success-soft); color: var(--success); }
+  .loop-step h4 { font-size: 20px; }
+  .loop-step p { font-size: 15px; color: var(--muted); margin-top: 4px; }
+  .loop-line { margin-left: 32px; height: 24px; border-left: 2px dashed var(--line); }
+
+  /* ===== FOUNDING ===== */
+  .founding {
+    background: var(--accent-soft);
+    border-radius: 24px; padding: 56px 64px;
+    border: 1px solid #F5D6BA;
+    position: relative; overflow: hidden;
+  }
+  .founding::before {
+    content: ""; position: absolute; right: -120px; top: -120px;
+    width: 380px; height: 380px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,91,20,0.18), transparent 65%);
+    pointer-events: none;
+  }
+  .founding-inner { position: relative; display: grid; grid-template-columns: 1.2fr 1fr; gap: 48px; align-items: center; }
+  .founding h2 { font-size: clamp(36px, 4.6vw, 52px); line-height: 1.04; }
+  .founding p { margin-top: 16px; font-size: 18px; color: var(--ink-2); }
+  .founding-list { display: flex; flex-direction: column; gap: 12px; }
+  .founding-item {
+    background: rgba(255,255,255,0.7); backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.9);
+    border-radius: 12px; padding: 16px 20px;
+    display: flex; gap: 14px; align-items: flex-start;
+  }
+  .founding-item .check {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--accent); color: white;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 700; flex-shrink: 0;
+  }
+  .founding-item h4 { font-size: 17px; }
+  .founding-item p { margin-top: 4px; font-size: 14px; color: var(--muted); }
+
+  /* ===== FAQ ===== */
+  .faq-list { display: flex; flex-direction: column; }
+  .faq-item {
+    border-top: 1px solid var(--line); padding: 24px 0;
+    display: grid; grid-template-columns: 80px 1fr; gap: 32px;
+  }
+  .faq-item:last-child { border-bottom: 1px solid var(--line); }
+  .faq-num { font-family: "JetBrains Mono", monospace; font-size: 13px; color: var(--accent); font-weight: 600; padding-top: 6px; }
+  .faq-item h4 { font-size: 22px; line-height: 1.2; }
+  .faq-item p { margin-top: 10px; font-size: 16px; color: var(--muted); max-width: 760px; }
+
+  /* ===== CTA ===== */
+  .cta-final {
+    text-align: center; padding: 120px 0 100px;
+    border-top: 1px solid var(--line);
+    background: var(--surface2);
+  }
+  .cta-final h2 {
+    font-size: clamp(48px, 6.6vw, 88px); line-height: 0.98; letter-spacing: -0.04em;
+    max-width: 1100px; margin: 0 auto;
+  }
+  .cta-final h2 .accent { color: var(--accent); }
+  .cta-final p { margin-top: 24px; font-size: 20px; color: var(--muted); }
+  .cta-final .btn-row { margin-top: 36px; display: inline-flex; gap: 14px; }
+
+  /* ===== FOOTER ===== */
+  footer {
+    padding: 48px 0 56px;
+    background: var(--bg);
+    border-top: 1px solid var(--line);
+  }
+  footer .row {
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 16px;
+  }
+  footer .links2 { display: flex; gap: 28px; font-size: 13px; color: var(--muted); }
+  footer .links2 a:hover { color: var(--accent); }
+  footer .legal { font-family: "JetBrains Mono", monospace; font-size: 12px; color: var(--faint); }
+
+  @media (max-width: 980px) {
+    nav .links { display: none; }
+    .hero-visual { grid-template-columns: 1fr; gap: 16px; }
+    .hv-divider { flex-direction: row; height: 40px; }
+    .hv-divider .line { width: auto; height: 1px; flex: 1; }
+    .stat-strip .grid { grid-template-columns: repeat(2, 1fr); gap: 32px 24px; }
+    .stat-cell { border-left: none; padding-left: 0; }
+    .problem-grid { grid-template-columns: 1fr; }
+    .problem-cell { border-right: none; border-bottom: 1px solid var(--line); }
+    .problem-cell:last-child { border-bottom: none; }
+    .how-grid { grid-template-columns: 1fr; }
+    .product { grid-template-columns: 1fr; gap: 56px; }
+    .handoff { grid-template-columns: 1fr; padding: 40px; gap: 40px; }
+    .loop-wrap { grid-template-columns: 1fr; gap: 32px; }
+    .founding { padding: 40px; }
+    .founding-inner { grid-template-columns: 1fr; gap: 32px; }
+    .faq-item { grid-template-columns: 1fr; gap: 4px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============== NAV ============== -->
+<nav class="top">
+  <div class="container row">
+    <a href="#" class="logo">
+      <span class="logo-mark">⚡</span>
+      <span>BLAST</span>
+    </a>
+    <div class="links">
+      <a href="#how">How it works</a>
+      <a href="#product">Product</a>
+      <a href="#credits">Credits</a>
+      <a href="#faq">FAQ</a>
+    </div>
+    <div class="cta-row">
+      <a href="#signin" class="btn btn-ghost">Sign in</a>
+      <a href="#signup" class="btn btn-primary">Get early access</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ============== HERO ============== -->
+<section class="hero">
+  <div class="container">
+    <span class="hero-pill"><span class="dot"></span>Now in private beta · Klang Valley first</span>
+    <h1 class="hero-title">The end of the WhatsApp <span class="accent">scroll</span>.</h1>
+    <p class="hero-lede">A mobile-first co-agency network for Malaysian realtors. Post once, reach everyone — no group invites, no buried messages, no chasing details over DM.</p>
+    <div class="hero-cta-row">
+      <a href="#signup" class="btn btn-accent btn-lg">Claim your founding spot →</a>
+      <a href="#how" class="btn btn-ghost btn-lg">See how it works</a>
+    </div>
+    <div class="hero-meta">
+      <span><span class="check">✓</span> Free for the first 200 realtors</span>
+      <span><span class="check">✓</span> 30 credits on signup</span>
+      <span><span class="check">✓</span> No card required</span>
+      <span><span class="check">✓</span> Built for REN, PEA &amp; E-numbers</span>
+    </div>
+
+    <!-- Visual: Before / After -->
+    <div class="hero-visual">
+      <div class="hv-col hv-before">
+        <span class="hv-label before">Today · WhatsApp groups</span>
+        <div class="wa-mock">
+          <div class="wa-msg"><div class="name">Ahmad · PropNex</div>Bangsar South 3R2B 1100sqft RM850k call 012-345xxxx<div class="time">9:14 AM</div></div>
+          <div class="wa-msg"><div class="name">Siti · IQI</div>WTB condo Mont Kiara budget 1.2m, urgent 🙏<div class="time">9:16 AM</div></div>
+          <div class="wa-msg"><div class="name">Daniel</div>📎 Brochure_BangsarHeights_2026.pdf<div class="time">9:18 AM</div></div>
+          <div class="wa-msg"><div class="name">Kevin · Reapfield</div>Industrial land Shah Alam 2.5 acre Bumi Lot<div class="time">9:21 AM</div></div>
+          <div class="wa-msg"><div class="name">Jaya</div>Anyone has Setia Alam landed? buyer waiting<div class="time">9:23 AM</div></div>
+          <div class="wa-fade"></div>
+        </div>
+      </div>
+
+      <div class="hv-divider">
+        <div class="line"></div>
+        <div class="word">↓ becomes ↓</div>
+        <div class="line"></div>
+      </div>
+
+      <div class="hv-col hv-after">
+        <span class="hv-label after">On BLAST · Searchable</span>
+        <div class="hv-search">🔍 <span>Bangsar, 3R, ≤ RM 900k, freehold</span></div>
+        <div class="hv-chips">
+          <span class="hv-chip on">All</span>
+          <span class="hv-chip">Listings</span>
+          <span class="hv-chip">Looking</span>
+          <span class="hv-chip">🏆 Done</span>
+        </div>
+        <div class="hv-list">
+          <div class="lst">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span class="badge badge-sell">Sell</span>
+              <span class="mono" style="font-size:11px; color: var(--muted);">Ahmad · IQI · 2h</span>
+            </div>
+            <div style="margin-top:8px; font-weight:600; font-size:14px;">Bangsar South · 3R2B</div>
+            <div style="font-size:12px; color: var(--muted); margin-top:2px;">RM 850,000 · 1,100 sqft · Freehold</div>
+          </div>
+          <div class="lst" style="background: var(--info-soft); border-color: transparent;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span class="badge badge-buy">Buy</span>
+              <span class="mono" style="font-size:11px; color: var(--muted);">Siti · PropNex · 4h</span>
+            </div>
+            <div style="margin-top:8px; font-weight:600; font-size:14px;">WTB · Mont Kiara</div>
+            <div style="font-size:12px; color: var(--muted); margin-top:2px;">Budget ≤ RM 1.2M · 3R · urgent</div>
+          </div>
+          <div class="lst">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span class="badge badge-let">Let</span>
+              <span class="mono" style="font-size:11px; color: var(--muted);">Mei · IQI · 1d</span>
+            </div>
+            <div style="margin-top:8px; font-weight:600; font-size:14px;">Verve Suites · 2R2B</div>
+            <div style="font-size:12px; color: var(--muted); margin-top:2px;">RM 4,200/mo · furnished</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== STAT STRIP ============== -->
+<section class="stat-strip">
+  <div class="container">
+    <div class="grid">
+      <div class="stat-cell">
+        <div class="stat-num accent">~14h</div>
+        <div class="stat-label">Per week the typical realtor spends scrolling co-broke groups.</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-num accent">7</div>
+        <div class="stat-label">Co-broke WhatsApp groups the average agent monitors at once.</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-num accent">~6mo</div>
+        <div class="stat-label">For a new agent to network into the right groups for their segment.</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-num accent">0</div>
+        <div class="stat-label">Listings searchable once they scroll past message #200.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== PROBLEM ============== -->
+<section class="block" id="problem">
+  <div class="container">
+    <div class="block-head">
+      <div class="eyebrow">How co-agency works today</div>
+      <h2>The whole industry runs on <span class="accent">WhatsApp groups</span>. And it shows.</h2>
+      <p class="lede">Hundreds of invite-only groups. 50–200 agents in each. Every listing dumped as a message. No structure, no search, no memory.</p>
+    </div>
+
+    <div class="problem-grid">
+      <div class="problem-cell">
+        <div class="num">01</div>
+        <h3>You can't get in.</h3>
+        <p>Groups are invite-only and gatekept. New agents starve for years before they network into the right ones for their segment.</p>
+      </div>
+      <div class="problem-cell">
+        <div class="num">02</div>
+        <h3>Listings vanish in minutes.</h3>
+        <p>A great listing posted at 9am is buried by 11am. There's no search. You either saw it live, or you missed it forever.</p>
+      </div>
+      <div class="problem-cell">
+        <div class="num">03</div>
+        <h3>Nothing is structured.</h3>
+        <p>Half the messages are missing the price, the tenure, or the size. You waste hours chasing details over private DM.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== HOW IT WORKS ============== -->
+<section class="block compact" id="how" style="background: var(--surface2); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);">
+  <div class="container">
+    <div class="block-head">
+      <div class="eyebrow">How BLAST works</div>
+      <h2>Three taps. One network. Every co-agent in Malaysia.</h2>
+      <p class="lede">No group invites. No admins. The moment you publish your first listing, every other realtor on BLAST sees it. You're in. Permanently.</p>
+    </div>
+
+    <div class="how-grid">
+      <div class="how-card">
+        <div class="step"><span class="ring">1</span>JOT</div>
+        <h3>Notepad first.</h3>
+        <p>Open a Note in five seconds — Bangsar South, 3R2B, RM 850k. Save as a private draft, or fill in the rest later.</p>
+        <div class="visual">
+          <div class="vchip">QUICK NOTE *</div>
+          <div style="font-size:13px; color: var(--ink-2); line-height:1.4;">Bangsar South 3R2B 1,100sqft<br/>RM 850k furnished, motivated owner ✨</div>
+          <div style="margin-top:auto; display:flex; gap:6px;">
+            <span class="hv-chip on">Want To Sell</span>
+            <span class="hv-chip">Let</span>
+          </div>
+        </div>
+      </div>
+      <div class="how-card">
+        <div class="step"><span class="ring">2</span>BLAST</div>
+        <h3>One tap, one credit.</h3>
+        <p>Tap Blast. The listing goes public to every verified realtor on the network — structured fields, instantly searchable.</p>
+        <div class="visual" style="background: var(--accent-soft); border-color: #F5D6BA;">
+          <div class="vchip" style="color: var(--accent-deep);">BROADCASTING…</div>
+          <div style="font-size:24px; font-weight: 800; color: var(--accent-deep);">⚡ −1 🪙</div>
+          <div style="margin-top:auto; font-size:12px; color: var(--accent-deep);">Now visible to 1,247 realtors across KL &amp; Selangor.</div>
+        </div>
+      </div>
+      <div class="how-card">
+        <div class="step"><span class="ring">3</span>CLOSE</div>
+        <h3>Match → WhatsApp → Done.</h3>
+        <p>Another agent taps "Co-Agency on WhatsApp" — pre-filled, one-tap. Close it, mark Done Deal, +30 credits back.</p>
+        <div class="visual" style="background: #DCF8C6;">
+            <div style="font-size:12px; color: #128C4E; font-weight:600;">💬 Ahmad · IQI</div>
+            <div style="font-size:13px; color: #2C2C30; background: white; padding:8px 10px; border-radius: 8px;">Hi Ahmad — saw your Bangsar listing on BLAST…</div>
+            <div style="margin-top:auto; padding: 6px 10px; background: var(--success); color: white; border-radius: 8px; font-size: 12px; font-weight:600; align-self: flex-start;">🏆 Done Deal · +30 🪙</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== PRODUCT ============== -->
+<section class="block" id="product">
+  <div class="container">
+    <div class="block-head">
+      <div class="eyebrow">The product</div>
+      <h2>Useful on day one. <span class="accent">10× more</span> the moment you Blast.</h2>
+      <p class="lede">A notepad first, a network second. Even with zero contacts, BLAST replaces the messy notes app every realtor already keeps. Then it gets better the moment you tap Blast.</p>
+    </div>
+
+    <div class="product">
+      <!-- Phone -->
+      <div class="phone">
+        <div class="phone-screen">
+          <div class="phone-head">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <span style="width: 28px; height: 28px; background: var(--accent); border-radius: 7px; color: white; display: inline-flex; align-items: center; justify-content: center; font-weight: 700;">⚡</span>
+              <span style="font-weight: 700; font-size: 17px;">COA Feed</span>
+            </div>
+            <span class="mono" style="font-size: 12px; color: var(--muted);">🪙 30</span>
+          </div>
+          <div class="phone-search">🔍 <span>Bangsar, 3R, ≤900k</span></div>
+          <div class="phone-tabs">
+            <span class="hv-chip on">All</span>
+            <span class="hv-chip">Listings</span>
+            <span class="hv-chip">Looking</span>
+            <span class="hv-chip">🏆 Done</span>
+          </div>
+          <div class="phone-list">
+            <div class="lst">
+              <div style="display:flex; justify-content:space-between;"><span class="badge badge-sell">Sell</span><span class="mono" style="font-size:10px; color: var(--muted);">Ahmad · IQI</span></div>
+              <div style="margin-top:8px; font-weight:600; font-size:13px;">Bangsar South · 3R2B</div>
+              <div style="font-size:11px; color: var(--muted); margin-top:2px;">RM 850k · 1,100 sqft · Freehold</div>
+              <div style="margin-top:10px; padding:7px; background: #25D36622; color: #128C4E; border-radius: 7px; text-align:center; font-size: 11px; font-weight: 600;">💬 Co-Agency</div>
+            </div>
+            <div class="lst" style="background: var(--info-soft); border-color: transparent;">
+              <div style="display:flex; justify-content:space-between;"><span class="badge badge-buy">Buy</span><span class="mono" style="font-size:10px; color: var(--muted);">Siti · PropNex</span></div>
+              <div style="margin-top:8px; font-weight:600; font-size:13px;">WTB · Mont Kiara</div>
+              <div style="font-size:11px; color: var(--muted); margin-top:2px;">Budget ≤ RM 1.2M · 3R</div>
+              <div style="margin-top:10px; padding:7px; background: #25D36622; color: #128C4E; border-radius: 7px; text-align:center; font-size: 11px; font-weight: 600;">💬 I Have a Match</div>
+            </div>
+            <div class="lst">
+              <div style="display:flex; justify-content:space-between;"><span class="badge badge-let">Let</span><span class="mono" style="font-size:10px; color: var(--muted);">Mei · IQI</span></div>
+              <div style="margin-top:8px; font-weight:600; font-size:13px;">Verve Suites · 2R2B</div>
+              <div style="font-size:11px; color: var(--muted); margin-top:2px;">RM 4,200/mo · furnished</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Features -->
+      <div class="feat-list">
+        <div class="feat-item">
+          <div class="ico">📝</div>
+          <div>
+            <h4>A private notepad that doesn't go stale.</h4>
+            <p>Drafts stay yours. Use BLAST as your active-listing notebook even before anything goes public — and Blast a unit the moment you're ready.</p>
+          </div>
+        </div>
+        <div class="feat-item">
+          <div class="ico">🇲🇾</div>
+          <div>
+            <h4>Built for the way Malaysia transacts.</h4>
+            <p>REN, PEA &amp; E-number. Freehold, Leasehold, Bumi Lot. Floor loading, power supply, Malay-reserved. The fields that actually matter — not a generic global form.</p>
+          </div>
+        </div>
+        <div class="feat-item">
+          <div class="ico">🔍</div>
+          <div>
+            <h4>Search instead of scroll.</h4>
+            <p>Filter by area, price, type, tenure, intent. Listings stay searchable forever — never buried at message #201 again.</p>
+          </div>
+        </div>
+        <div class="feat-item">
+          <div class="ico">💬</div>
+          <div>
+            <h4>Pre-filled WhatsApp handoff.</h4>
+            <p>Match in BLAST. Close on WhatsApp — exactly where Malaysian deals already happen. One tap, one pre-written message, zero awkward intros.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== HANDOFF ============== -->
+<section class="block compact">
+  <div class="container">
+    <div class="handoff">
+      <div>
+        <div class="eyebrow" style="color: var(--accent);">The clever bit</div>
+        <h2>We don't replace WhatsApp.<br/>We feed it.</h2>
+        <p>Malaysian agents close deals on WhatsApp — voice notes, brochures, screenshots of bank approvals. Building an in-app messenger means fighting a 10-year habit. So we don't. BLAST handles discovery; WhatsApp handles the conversation that closes the deal.</p>
+        <div class="keys">
+          <span class="key">Pre-filled message</span>
+          <span class="key">One tap</span>
+          <span class="key">Free distribution</span>
+          <span class="key">Zero learning curve</span>
+        </div>
+      </div>
+
+      <div class="handoff-card">
+        <div class="row1">
+          <span class="badge badge-sell" style="background: #F2F1ED; color: #16161A;">Want To Sell</span>
+          <div class="mono" style="font-size:11px; color: rgba(255,255,255,0.5);">posted 2h ago</div>
+        </div>
+        <h3>Bangsar South · 3R2B</h3>
+        <div style="color: rgba(255,255,255,0.6); font-size: 14px; margin-top: 4px;">The Park · Kuala Lumpur</div>
+        <div class="grid2">
+          <div><div class="lbl">PRICE</div><div class="val">RM 850,000</div></div>
+          <div><div class="lbl">SIZE</div><div class="val">1,100 sqft</div></div>
+          <div><div class="lbl">TENURE</div><div class="val">Freehold</div></div>
+          <div><div class="lbl">PSF</div><div class="val">RM 773</div></div>
+        </div>
+        <div style="margin-top: 22px; padding-top: 18px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 13px; color: rgba(255,255,255,0.65);">Ahmad · IQI Realty · REN 24102</div>
+        <button>💬 Co-Agency on WhatsApp</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== CREDIT LOOP ============== -->
+<section class="block" id="credits">
+  <div class="container">
+    <div class="block-head">
+      <div class="eyebrow">The economy</div>
+      <h2>A credit system that pays for itself.</h2>
+      <p class="lede">30 credits free on signup. Spend one to Blast a listing. Mark Done Deal — +30 credits back. Active closers never need to top up.</p>
+    </div>
+
+    <div class="loop-wrap">
+      <div class="loop-card">
+        <div class="loop-row">
+          <div class="loop-pill lp-1">+30</div>
+          <div class="loop-step">
+            <h4>Sign up</h4>
+            <p>Enough credits to Blast your full active portfolio on day one. No card.</p>
+          </div>
+        </div>
+        <div class="loop-line"></div>
+        <div class="loop-row">
+          <div class="loop-pill lp-2">−1</div>
+          <div class="loop-step">
+            <h4>Blast a listing</h4>
+            <p>Goes public to every realtor. Drafts and updates stay free.</p>
+          </div>
+        </div>
+        <div class="loop-line"></div>
+        <div class="loop-row">
+          <div class="loop-pill lp-3">+30</div>
+          <div class="loop-step">
+            <h4>Mark Done Deal</h4>
+            <p>Self-funding loop — refills the tank for the next 30 listings.</p>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="eyebrow muted">The hidden game</div>
+        <h3 style="font-size: 38px; line-height: 1.08; margin-top: 14px; max-width: 520px;">Every Done Deal is a verified transaction.</h3>
+        <p style="margin-top: 18px; font-size: 17px; color: var(--muted); max-width: 520px;">Area, price, type, date. Stack thousands of these and BLAST has what no Malaysian portal has — real closed-deal data, not asking-price fiction.</p>
+
+        <div style="margin-top: 28px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+          <div style="padding: 18px; background: var(--surface2); border: 1px solid var(--line-soft); border-radius: 12px;">
+            <div class="mono" style="font-size: 11px; color: var(--muted); letter-spacing: 0.1em;">PORTALS HAVE</div>
+            <div style="margin-top: 6px; font-size: 16px; font-weight: 600;">Listing prices</div>
+            <div style="font-size: 13px; color: var(--faint); margin-top: 2px;">asking, fictional</div>
+          </div>
+          <div style="padding: 18px; background: var(--ink); color: var(--bg); border-radius: 12px;">
+            <div class="mono" style="font-size: 11px; color: var(--accent); letter-spacing: 0.1em;">BLAST HAS</div>
+            <div style="margin-top: 6px; font-size: 16px; font-weight: 600;">Closed prices</div>
+            <div style="font-size: 13px; color: rgba(255,255,255,0.5); margin-top: 2px;">reality, gold</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== FOUNDING MEMBERS ============== -->
+<section class="block compact" id="signup">
+  <div class="container">
+    <div class="founding">
+      <div class="founding-inner">
+        <div>
+          <div class="eyebrow">Founding members</div>
+          <h2 style="margin-top: 16px;">Free for the first 200 realtors.</h2>
+          <p>The earliest BLAST members shape the product, the fields, the deal-flow rituals. As long as you stay active, you stay free. Forever.</p>
+          <div style="margin-top: 28px; display: flex; gap: 12px; flex-wrap: wrap;">
+            <a href="#" class="btn btn-accent btn-lg">Claim founding spot →</a>
+            <a href="#how" class="btn btn-ghost btn-lg" style="background: rgba(255,255,255,0.6); border-color: rgba(0,0,0,0.06);">Talk to us first</a>
+          </div>
+          <div class="mono" style="margin-top: 22px; font-size: 12px; color: var(--accent-deep); letter-spacing: 0.1em;">142 / 200 SPOTS CLAIMED · KLANG VALLEY COHORT</div>
+        </div>
+        <div class="founding-list">
+          <div class="founding-item">
+            <span class="check">✓</span>
+            <div><h4>Free posting, free forever</h4><p>As long as you mark a Done Deal at least once a quarter.</p></div>
+          </div>
+          <div class="founding-item">
+            <span class="check">✓</span>
+            <div><h4>Direct line to the founders</h4><p>WhatsApp us a feature request — see it ship that month.</p></div>
+          </div>
+          <div class="founding-item">
+            <span class="check">✓</span>
+            <div><h4>Founding badge on your profile</h4><p>Visible to every other agent. Deal-flow goes to those who post first.</p></div>
+          </div>
+          <div class="founding-item">
+            <span class="check">✓</span>
+            <div><h4>Early access to ProBroke insights</h4><p>Real closed-deal data by area when we ship it. Free for founders.</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== FAQ ============== -->
+<section class="block" id="faq">
+  <div class="container">
+    <div class="block-head">
+      <div class="eyebrow">Common questions</div>
+      <h2>Things every realtor asks first.</h2>
+      <p class="lede">Honest answers, no fine print.</p>
+    </div>
+
+    <div class="faq-list">
+      <div class="faq-item">
+        <div class="faq-num">Q · 01</div>
+        <div>
+          <h4>Do I have to leave my WhatsApp groups?</h4>
+          <p>No. BLAST sits next to them. Use it for discovery; keep WhatsApp for the chat that closes the deal. Most founding members run both for the first month, then quietly mute the groups.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-num">Q · 02</div>
+        <div>
+          <h4>Can other agents see my private notes?</h4>
+          <p>Never. Drafts stay private to your account. Only listings you tap "Blast" on go public. Notes, prices you're testing, motivation flags — all yours alone.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-num">Q · 03</div>
+        <div>
+          <h4>What does it cost?</h4>
+          <p>Free to start — 30 credits on signup, +30 every Done Deal. If you close regularly, you'll never need to top up. Casual users can buy a small credit pack.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-num">Q · 04</div>
+        <div>
+          <h4>Is my REN number visible to the public?</h4>
+          <p>Only to other verified agents on BLAST. Never to consumers — BLAST is agent-only by design. We verify your REN/PEA/E-number on signup and gate the network behind it.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-num">Q · 05</div>
+        <div>
+          <h4>What if a deal closes off-platform?</h4>
+          <p>Mark it Done Deal honestly — it benefits you (credits) and the network (real price data). We don't take a cut of any commission, ever. BLAST is not in the closing path.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-num">Q · 06</div>
+        <div>
+          <h4>Is there a desktop version?</h4>
+          <p>Yes — a power-user web app for active closers, with multi-listing management and a Linear-style command palette. Mobile-first, but the desk is covered.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== FINAL CTA ============== -->
+<section class="cta-final">
+  <div class="container">
+    <h2>Stop scrolling.<br/>Start <span class="accent">closing</span>.</h2>
+    <p>Built by Malaysian realtors, for Malaysian realtors. Join the founding 200.</p>
+    <div class="btn-row">
+      <a href="#" class="btn btn-accent btn-lg">Claim your founding spot →</a>
+      <a href="#how" class="btn btn-ghost btn-lg">See how it works</a>
+    </div>
+    <div class="mono" style="margin-top: 28px; font-size: 12px; color: var(--faint); letter-spacing: 0.12em;">⚡ 30 CREDITS FREE · NO CARD · KLANG VALLEY COHORT OPEN</div>
+  </div>
+</section>
+
+<!-- ============== FOOTER ============== -->
+<footer>
+  <div class="container row">
+    <a href="#" class="logo" style="font-size: 16px;">
+      <span class="logo-mark" style="width: 26px; height: 26px; font-size: 15px;">⚡</span>
+      <span>BLAST</span>
+    </a>
+    <div class="links2">
+      <a href="#how">How it works</a>
+      <a href="#product">Product</a>
+      <a href="#credits">Credits</a>
+      <a href="#faq">FAQ</a>
+      <a href="mailto:hello@blast.my">hello@blast.my</a>
+    </div>
+    <div class="legal">© 2026 BLAST · BUILT IN KUALA LUMPUR</div>
+  </div>
+</footer>
+
+</body>
+</html>
