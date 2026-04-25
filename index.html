@@ -458,6 +458,221 @@
   footer .links2 a:hover { color: var(--accent); }
   footer .legal { font-family: "JetBrains Mono", monospace; font-size: 12px; color: var(--faint); }
 
+  /* ============== MOTION ============== */
+  :root {
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+    --ease-out-cubic: cubic-bezier(0.33, 1, 0.68, 1);
+  }
+
+  /* Hero entrance choreography */
+  .hero-pill   { animation: rise 800ms var(--ease-out-expo) 80ms both; }
+  h1.hero-title { animation: clip-rise 1100ms var(--ease-out-expo) 200ms both; }
+  h1.hero-title .accent { position: relative; display: inline-block; }
+  h1.hero-title .accent::after {
+    content: "";
+    position: absolute; left: 0; right: 0; bottom: 0.04em;
+    height: 0.08em;
+    background: var(--accent);
+    opacity: 0.22;
+    transform-origin: left;
+    transform: scaleX(0);
+    animation: draw 800ms var(--ease-out-expo) 1300ms forwards;
+  }
+  .hero-lede    { animation: rise 800ms var(--ease-out-expo) 420ms both; }
+  .hero-cta-row { animation: rise 800ms var(--ease-out-expo) 540ms both; }
+  .hero-meta    { animation: rise 800ms var(--ease-out-expo) 660ms both; }
+  .hero-visual  { animation: rise 1000ms var(--ease-out-expo) 800ms both; }
+
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(28px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes clip-rise {
+    from {
+      opacity: 0;
+      transform: translateY(40px);
+      clip-path: inset(0 0 100% 0);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+      clip-path: inset(0 0 -10% 0);
+    }
+  }
+  @keyframes draw { to { transform: scaleX(1); } }
+
+  /* Hero pill — pulsing dot */
+  .hero-pill .dot { animation: pulse 2.4s var(--ease-out-quart) infinite; }
+  @keyframes pulse {
+    0%   { box-shadow: 0 0 0 0 rgba(255, 91, 20, 0.55), 0 0 0 4px var(--accent-soft); }
+    70%  { box-shadow: 0 0 0 14px rgba(255, 91, 20, 0),    0 0 0 4px var(--accent-soft); }
+    100% { box-shadow: 0 0 0 0 rgba(255, 91, 20, 0),       0 0 0 4px var(--accent-soft); }
+  }
+
+  /* WhatsApp endless scroll — embodies the pain */
+  .wa-stream {
+    display: flex; flex-direction: column;
+    animation: wa-scroll 26s linear infinite;
+    will-change: transform;
+  }
+  @keyframes wa-scroll {
+    from { transform: translateY(0); }
+    to   { transform: translateY(-50%); }
+  }
+
+  /* "↓ becomes ↓" — flowing accent */
+  .hv-divider .line { position: relative; overflow: hidden; }
+  .hv-divider .line::before {
+    content: "";
+    position: absolute; left: 0; right: 0;
+    top: -25%; height: 25%;
+    background: linear-gradient(to bottom, transparent, var(--accent), transparent);
+    opacity: 0.6;
+    animation: flow 3s linear infinite;
+  }
+  @keyframes flow {
+    from { top: -25%; }
+    to   { top: 125%; }
+  }
+
+  /* Broadcasting visual — radiating rings */
+  .broadcast-visual { position: relative; }
+  .broadcast-visual > * { position: relative; z-index: 1; }
+  .broadcast-visual::before,
+  .broadcast-visual::after {
+    content: "";
+    position: absolute; top: 50%; left: 50%;
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    border: 2px solid var(--accent);
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 0;
+    animation: broadcast 2.6s ease-out infinite;
+  }
+  .broadcast-visual::after { animation-delay: 1.3s; }
+  @keyframes broadcast {
+    from { width: 30px;  height: 30px;  opacity: 0.6; }
+    to   { width: 320px; height: 320px; opacity: 0;   }
+  }
+
+  /* Reveal on scroll */
+  .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 900ms var(--ease-out-expo), transform 900ms var(--ease-out-expo);
+  }
+  .reveal.in { opacity: 1; transform: translateY(0); }
+  .problem-grid  .reveal:nth-child(1).in { transition-delay: 0ms;   }
+  .problem-grid  .reveal:nth-child(2).in { transition-delay: 90ms;  }
+  .problem-grid  .reveal:nth-child(3).in { transition-delay: 180ms; }
+  .how-grid      .reveal:nth-child(1).in { transition-delay: 0ms;   }
+  .how-grid      .reveal:nth-child(2).in { transition-delay: 110ms; }
+  .how-grid      .reveal:nth-child(3).in { transition-delay: 220ms; }
+  .feat-list     .reveal:nth-child(1).in { transition-delay: 0ms;   }
+  .feat-list     .reveal:nth-child(2).in { transition-delay: 80ms;  }
+  .feat-list     .reveal:nth-child(3).in { transition-delay: 160ms; }
+  .feat-list     .reveal:nth-child(4).in { transition-delay: 240ms; }
+  .founding-list .reveal:nth-child(1).in { transition-delay: 0ms;   }
+  .founding-list .reveal:nth-child(2).in { transition-delay: 90ms;  }
+  .founding-list .reveal:nth-child(3).in { transition-delay: 180ms; }
+  .founding-list .reveal:nth-child(4).in { transition-delay: 270ms; }
+  .faq-list      .reveal:nth-child(1).in { transition-delay: 0ms;   }
+  .faq-list      .reveal:nth-child(2).in { transition-delay: 60ms;  }
+  .faq-list      .reveal:nth-child(3).in { transition-delay: 120ms; }
+  .faq-list      .reveal:nth-child(4).in { transition-delay: 180ms; }
+  .faq-list      .reveal:nth-child(5).in { transition-delay: 240ms; }
+  .faq-list      .reveal:nth-child(6).in { transition-delay: 300ms; }
+
+  /* Phone — gentle float */
+  .phone {
+    animation: float 7s ease-in-out infinite;
+    will-change: transform;
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-6px); }
+  }
+
+  /* Hover lifts */
+  .how-card,
+  .lst,
+  .feat-item .ico,
+  .founding-item,
+  .loop-card,
+  .handoff-card {
+    transition: transform 320ms var(--ease-out-expo),
+                box-shadow 320ms var(--ease-out-expo),
+                border-color 200ms ease,
+                background 200ms ease;
+  }
+  .how-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(255, 91, 20, 0.35);
+    box-shadow: 0 14px 32px rgba(22, 22, 26, 0.06);
+  }
+  .lst:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(22, 22, 26, 0.06);
+  }
+  .founding-item:hover {
+    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.88);
+  }
+  .feat-item:hover .ico {
+    transform: rotate(-6deg) scale(1.06);
+    background: var(--accent);
+    color: white;
+  }
+
+  /* Buttons */
+  .btn-primary { transition: background 200ms ease, transform 180ms var(--ease-out-expo); }
+  .btn-accent  {
+    transition: background 200ms ease, transform 180ms var(--ease-out-expo), box-shadow 200ms ease;
+  }
+  .btn-accent:hover { box-shadow: 0 10px 24px rgba(255, 91, 20, 0.25); }
+
+  /* CTA arrow slide */
+  .cta-arrow {
+    display: inline-block;
+    transition: transform 240ms var(--ease-out-expo);
+    will-change: transform;
+  }
+  .btn:hover .cta-arrow { transform: translateX(4px); }
+
+  /* Nav scroll state */
+  nav.top {
+    transition: background 220ms ease, border-color 220ms ease, box-shadow 220ms ease;
+  }
+  nav.top.scrolled {
+    background: rgba(247, 246, 242, 0.96);
+    box-shadow: 0 1px 0 rgba(22, 22, 26, 0.04);
+  }
+
+  /* Logo bolt — micro-tilt */
+  .logo .logo-mark { transition: transform 240ms var(--ease-out-expo); }
+  .logo:hover .logo-mark { transform: rotate(-12deg); }
+
+  /* Stat numbers — tabular for clean count-up */
+  .stat-num[data-count] { font-variant-numeric: tabular-nums; }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      transition-delay: 0ms !important;
+    }
+    .reveal { opacity: 1; transform: none; }
+    h1.hero-title { clip-path: none !important; transform: none !important; opacity: 1 !important; }
+    .wa-stream { animation: none !important; }
+    .phone { animation: none !important; }
+    .broadcast-visual::before,
+    .broadcast-visual::after { display: none; }
+  }
+
   @media (max-width: 980px) {
     nav .links { display: none; }
     .hero-visual { grid-template-columns: 1fr; gap: 16px; }
@@ -507,7 +722,7 @@
     <h1 class="hero-title">The end of the WhatsApp <span class="accent">scroll</span>.</h1>
     <p class="hero-lede">A mobile-first co-agency network for Malaysian realtors. Post once, reach everyone — no group invites, no buried messages, no chasing details over DM.</p>
     <div class="hero-cta-row">
-      <a href="#signup" class="btn btn-accent btn-lg">Claim your founding spot →</a>
+      <a href="#signup" class="btn btn-accent btn-lg">Claim your founding spot <span class="cta-arrow">→</span></a>
       <a href="#how" class="btn btn-ghost btn-lg">See how it works</a>
     </div>
     <div class="hero-meta">
@@ -522,11 +737,23 @@
       <div class="hv-col hv-before">
         <span class="hv-label before">Today · WhatsApp groups</span>
         <div class="wa-mock">
-          <div class="wa-msg"><div class="name">Ahmad · PropNex</div>Bangsar South 3R2B 1100sqft RM850k call 012-345xxxx<div class="time">9:14 AM</div></div>
-          <div class="wa-msg"><div class="name">Siti · IQI</div>WTB condo Mont Kiara budget 1.2m, urgent 🙏<div class="time">9:16 AM</div></div>
-          <div class="wa-msg"><div class="name">Daniel</div>📎 Brochure_BangsarHeights_2026.pdf<div class="time">9:18 AM</div></div>
-          <div class="wa-msg"><div class="name">Kevin · Reapfield</div>Industrial land Shah Alam 2.5 acre Bumi Lot<div class="time">9:21 AM</div></div>
-          <div class="wa-msg"><div class="name">Jaya</div>Anyone has Setia Alam landed? buyer waiting<div class="time">9:23 AM</div></div>
+          <div class="wa-stream">
+            <div class="wa-msg"><div class="name">Ahmad · PropNex</div>Bangsar South 3R2B 1100sqft RM850k call 012-345xxxx<div class="time">9:14 AM</div></div>
+            <div class="wa-msg"><div class="name">Siti · IQI</div>WTB condo Mont Kiara budget 1.2m, urgent 🙏<div class="time">9:16 AM</div></div>
+            <div class="wa-msg"><div class="name">Daniel</div>📎 Brochure_BangsarHeights_2026.pdf<div class="time">9:18 AM</div></div>
+            <div class="wa-msg"><div class="name">Kevin · Reapfield</div>Industrial land Shah Alam 2.5 acre Bumi Lot<div class="time">9:21 AM</div></div>
+            <div class="wa-msg"><div class="name">Jaya</div>Anyone has Setia Alam landed? buyer waiting<div class="time">9:23 AM</div></div>
+            <div class="wa-msg"><div class="name">Wei · Chester</div>Sri Hartamas semi-D 4R RM2.8M nego, owner direct<div class="time">9:24 AM</div></div>
+            <div class="wa-msg"><div class="name">Priya · Hartamas</div>WTR Damansara Heights 3R furnished max 6k<div class="time">9:26 AM</div></div>
+            <!-- duplicated for seamless loop -->
+            <div class="wa-msg" aria-hidden="true"><div class="name">Ahmad · PropNex</div>Bangsar South 3R2B 1100sqft RM850k call 012-345xxxx<div class="time">9:14 AM</div></div>
+            <div class="wa-msg" aria-hidden="true"><div class="name">Siti · IQI</div>WTB condo Mont Kiara budget 1.2m, urgent 🙏<div class="time">9:16 AM</div></div>
+            <div class="wa-msg" aria-hidden="true"><div class="name">Daniel</div>📎 Brochure_BangsarHeights_2026.pdf<div class="time">9:18 AM</div></div>
+            <div class="wa-msg" aria-hidden="true"><div class="name">Kevin · Reapfield</div>Industrial land Shah Alam 2.5 acre Bumi Lot<div class="time">9:21 AM</div></div>
+            <div class="wa-msg" aria-hidden="true"><div class="name">Jaya</div>Anyone has Setia Alam landed? buyer waiting<div class="time">9:23 AM</div></div>
+            <div class="wa-msg" aria-hidden="true"><div class="name">Wei · Chester</div>Sri Hartamas semi-D 4R RM2.8M nego, owner direct<div class="time">9:24 AM</div></div>
+            <div class="wa-msg" aria-hidden="true"><div class="name">Priya · Hartamas</div>WTR Damansara Heights 3R furnished max 6k<div class="time">9:26 AM</div></div>
+          </div>
           <div class="wa-fade"></div>
         </div>
       </div>
@@ -582,19 +809,19 @@
   <div class="container">
     <div class="grid">
       <div class="stat-cell">
-        <div class="stat-num accent">~14h</div>
+        <div class="stat-num accent" data-count="14" data-prefix="~" data-suffix="h">~14h</div>
         <div class="stat-label">Per week the typical realtor spends scrolling co-broke groups.</div>
       </div>
       <div class="stat-cell">
-        <div class="stat-num accent">7</div>
+        <div class="stat-num accent" data-count="7">7</div>
         <div class="stat-label">Co-broke WhatsApp groups the average agent monitors at once.</div>
       </div>
       <div class="stat-cell">
-        <div class="stat-num accent">~6mo</div>
+        <div class="stat-num accent" data-count="6" data-prefix="~" data-suffix="mo">~6mo</div>
         <div class="stat-label">For a new agent to network into the right groups for their segment.</div>
       </div>
       <div class="stat-cell">
-        <div class="stat-num accent">0</div>
+        <div class="stat-num accent" data-count="0" data-start="200">0</div>
         <div class="stat-label">Listings searchable once they scroll past message #200.</div>
       </div>
     </div>
@@ -611,17 +838,17 @@
     </div>
 
     <div class="problem-grid">
-      <div class="problem-cell">
+      <div class="problem-cell reveal">
         <div class="num">01</div>
         <h3>You can't get in.</h3>
         <p>Groups are invite-only and gatekept. New agents starve for years before they network into the right ones for their segment.</p>
       </div>
-      <div class="problem-cell">
+      <div class="problem-cell reveal">
         <div class="num">02</div>
         <h3>Listings vanish in minutes.</h3>
         <p>A great listing posted at 9am is buried by 11am. There's no search. You either saw it live, or you missed it forever.</p>
       </div>
-      <div class="problem-cell">
+      <div class="problem-cell reveal">
         <div class="num">03</div>
         <h3>Nothing is structured.</h3>
         <p>Half the messages are missing the price, the tenure, or the size. You waste hours chasing details over private DM.</p>
@@ -640,7 +867,7 @@
     </div>
 
     <div class="how-grid">
-      <div class="how-card">
+      <div class="how-card reveal">
         <div class="step"><span class="ring">1</span>JOT</div>
         <h3>Notepad first.</h3>
         <p>Open a Note in five seconds — Bangsar South, 3R2B, RM 850k. Save as a private draft, or fill in the rest later.</p>
@@ -653,17 +880,17 @@
           </div>
         </div>
       </div>
-      <div class="how-card">
+      <div class="how-card reveal">
         <div class="step"><span class="ring">2</span>BLAST</div>
         <h3>One tap, one credit.</h3>
         <p>Tap Blast. The listing goes public to every verified realtor on the network — structured fields, instantly searchable.</p>
-        <div class="visual" style="background: var(--accent-soft); border-color: #F5D6BA;">
+        <div class="visual broadcast-visual" style="background: var(--accent-soft); border-color: #F5D6BA;">
           <div class="vchip" style="color: var(--accent-deep);">BROADCASTING…</div>
           <div style="font-size:24px; font-weight: 800; color: var(--accent-deep);">⚡ −1 🪙</div>
           <div style="margin-top:auto; font-size:12px; color: var(--accent-deep);">Now visible to 1,247 realtors across KL &amp; Selangor.</div>
         </div>
       </div>
-      <div class="how-card">
+      <div class="how-card reveal">
         <div class="step"><span class="ring">3</span>CLOSE</div>
         <h3>Match → WhatsApp → Done.</h3>
         <p>Another agent taps "Co-Agency on WhatsApp" — pre-filled, one-tap. Close it, mark Done Deal, +30 credits back.</p>
@@ -728,28 +955,28 @@
 
       <!-- Features -->
       <div class="feat-list">
-        <div class="feat-item">
+        <div class="feat-item reveal">
           <div class="ico">📝</div>
           <div>
             <h4>A private notepad that doesn't go stale.</h4>
             <p>Drafts stay yours. Use BLAST as your active-listing notebook even before anything goes public — and Blast a unit the moment you're ready.</p>
           </div>
         </div>
-        <div class="feat-item">
+        <div class="feat-item reveal">
           <div class="ico">🇲🇾</div>
           <div>
             <h4>Built for the way Malaysia transacts.</h4>
             <p>REN, PEA &amp; E-number. Freehold, Leasehold, Bumi Lot. Floor loading, power supply, Malay-reserved. The fields that actually matter — not a generic global form.</p>
           </div>
         </div>
-        <div class="feat-item">
+        <div class="feat-item reveal">
           <div class="ico">🔍</div>
           <div>
             <h4>Search instead of scroll.</h4>
             <p>Filter by area, price, type, tenure, intent. Listings stay searchable forever — never buried at message #201 again.</p>
           </div>
         </div>
-        <div class="feat-item">
+        <div class="feat-item reveal">
           <div class="ico">💬</div>
           <div>
             <h4>Pre-filled WhatsApp handoff.</h4>
@@ -764,7 +991,7 @@
 <!-- ============== HANDOFF ============== -->
 <section class="block compact">
   <div class="container">
-    <div class="handoff">
+    <div class="handoff reveal">
       <div>
         <div class="eyebrow" style="color: var(--accent);">The clever bit</div>
         <h2>We don't replace WhatsApp.<br/>We feed it.</h2>
@@ -807,7 +1034,7 @@
     </div>
 
     <div class="loop-wrap">
-      <div class="loop-card">
+      <div class="loop-card reveal">
         <div class="loop-row">
           <div class="loop-pill lp-1">+30</div>
           <div class="loop-step">
@@ -865,25 +1092,25 @@
           <h2 style="margin-top: 16px;">Free for the first 200 realtors.</h2>
           <p>The earliest BLAST members shape the product, the fields, the deal-flow rituals. As long as you stay active, you stay free. Forever.</p>
           <div style="margin-top: 28px; display: flex; gap: 12px; flex-wrap: wrap;">
-            <a href="#" class="btn btn-accent btn-lg">Claim founding spot →</a>
+            <a href="#" class="btn btn-accent btn-lg">Claim founding spot <span class="cta-arrow">→</span></a>
             <a href="#how" class="btn btn-ghost btn-lg" style="background: rgba(255,255,255,0.6); border-color: rgba(0,0,0,0.06);">Talk to us first</a>
           </div>
-          <div class="mono" style="margin-top: 22px; font-size: 12px; color: var(--accent-deep); letter-spacing: 0.1em;">142 / 200 SPOTS CLAIMED · KLANG VALLEY COHORT</div>
+          <div class="mono" style="margin-top: 22px; font-size: 12px; color: var(--accent-deep); letter-spacing: 0.1em;"><span data-count="142">142</span> / 200 SPOTS CLAIMED · KLANG VALLEY COHORT</div>
         </div>
         <div class="founding-list">
-          <div class="founding-item">
+          <div class="founding-item reveal">
             <span class="check">✓</span>
             <div><h4>Free posting, free forever</h4><p>As long as you mark a Done Deal at least once a quarter.</p></div>
           </div>
-          <div class="founding-item">
+          <div class="founding-item reveal">
             <span class="check">✓</span>
             <div><h4>Direct line to the founders</h4><p>WhatsApp us a feature request — see it ship that month.</p></div>
           </div>
-          <div class="founding-item">
+          <div class="founding-item reveal">
             <span class="check">✓</span>
             <div><h4>Founding badge on your profile</h4><p>Visible to every other agent. Deal-flow goes to those who post first.</p></div>
           </div>
-          <div class="founding-item">
+          <div class="founding-item reveal">
             <span class="check">✓</span>
             <div><h4>Early access to ProBroke insights</h4><p>Real closed-deal data by area when we ship it. Free for founders.</p></div>
           </div>
@@ -903,42 +1130,42 @@
     </div>
 
     <div class="faq-list">
-      <div class="faq-item">
+      <div class="faq-item reveal">
         <div class="faq-num">Q · 01</div>
         <div>
           <h4>Do I have to leave my WhatsApp groups?</h4>
           <p>No. BLAST sits next to them. Use it for discovery; keep WhatsApp for the chat that closes the deal. Most founding members run both for the first month, then quietly mute the groups.</p>
         </div>
       </div>
-      <div class="faq-item">
+      <div class="faq-item reveal">
         <div class="faq-num">Q · 02</div>
         <div>
           <h4>Can other agents see my private notes?</h4>
           <p>Never. Drafts stay private to your account. Only listings you tap "Blast" on go public. Notes, prices you're testing, motivation flags — all yours alone.</p>
         </div>
       </div>
-      <div class="faq-item">
+      <div class="faq-item reveal">
         <div class="faq-num">Q · 03</div>
         <div>
           <h4>What does it cost?</h4>
           <p>Free to start — 30 credits on signup, +30 every Done Deal. If you close regularly, you'll never need to top up. Casual users can buy a small credit pack.</p>
         </div>
       </div>
-      <div class="faq-item">
+      <div class="faq-item reveal">
         <div class="faq-num">Q · 04</div>
         <div>
           <h4>Is my REN number visible to the public?</h4>
           <p>Only to other verified agents on BLAST. Never to consumers — BLAST is agent-only by design. We verify your REN/PEA/E-number on signup and gate the network behind it.</p>
         </div>
       </div>
-      <div class="faq-item">
+      <div class="faq-item reveal">
         <div class="faq-num">Q · 05</div>
         <div>
           <h4>What if a deal closes off-platform?</h4>
           <p>Mark it Done Deal honestly — it benefits you (credits) and the network (real price data). We don't take a cut of any commission, ever. BLAST is not in the closing path.</p>
         </div>
       </div>
-      <div class="faq-item">
+      <div class="faq-item reveal">
         <div class="faq-num">Q · 06</div>
         <div>
           <h4>Is there a desktop version?</h4>
@@ -955,7 +1182,7 @@
     <h2>Stop scrolling.<br/>Start <span class="accent">closing</span>.</h2>
     <p>Built by Malaysian realtors, for Malaysian realtors. Join the founding 200.</p>
     <div class="btn-row">
-      <a href="#" class="btn btn-accent btn-lg">Claim your founding spot →</a>
+      <a href="#" class="btn btn-accent btn-lg">Claim your founding spot <span class="cta-arrow">→</span></a>
       <a href="#how" class="btn btn-ghost btn-lg">See how it works</a>
     </div>
     <div class="mono" style="margin-top: 28px; font-size: 12px; color: var(--faint); letter-spacing: 0.12em;">⚡ 30 CREDITS FREE · NO CARD · KLANG VALLEY COHORT OPEN</div>
@@ -979,6 +1206,73 @@
     <div class="legal">© 2026 BLAST · BUILT IN KUALA LUMPUR</div>
   </div>
 </footer>
+
+<script>
+  (function () {
+    var reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // Reveal on scroll
+    var revealEls = document.querySelectorAll('.reveal');
+    if (reduced) {
+      revealEls.forEach(function (el) { el.classList.add('in'); });
+    } else if ('IntersectionObserver' in window) {
+      var revealIO = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) {
+            e.target.classList.add('in');
+            revealIO.unobserve(e.target);
+          }
+        });
+      }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+      revealEls.forEach(function (el) { revealIO.observe(el); });
+    } else {
+      revealEls.forEach(function (el) { el.classList.add('in'); });
+    }
+
+    // Count up / down on first sight
+    var easeOutCubic = function (t) { return 1 - Math.pow(1 - t, 3); };
+    function animateCount(el) {
+      var target = parseFloat(el.dataset.count);
+      var start = parseFloat(el.dataset.start || '0');
+      var prefix = el.dataset.prefix || '';
+      var suffix = el.dataset.suffix || '';
+      if (reduced) { el.textContent = prefix + target + suffix; return; }
+      var duration = 1400;
+      var t0 = performance.now();
+      function step(now) {
+        var k = Math.min(1, (now - t0) / duration);
+        var v = Math.round(start + (target - start) * easeOutCubic(k));
+        el.textContent = prefix + v + suffix;
+        if (k < 1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    }
+    var countEls = document.querySelectorAll('[data-count]');
+    if ('IntersectionObserver' in window) {
+      var countIO = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) {
+            animateCount(e.target);
+            countIO.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.4 });
+      countEls.forEach(function (el) { countIO.observe(el); });
+    } else {
+      countEls.forEach(animateCount);
+    }
+
+    // Nav scroll state
+    var nav = document.querySelector('nav.top');
+    if (nav) {
+      var onScroll = function () {
+        nav.classList.toggle('scrolled', window.scrollY > 16);
+      };
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+    }
+  })();
+</script>
 
 </body>
 </html>
